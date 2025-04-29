@@ -11,7 +11,7 @@ class RouteMarkersLayer extends StatelessWidget {
     super.key,
     required this.points,
     this.markerColor = Colors.red,
-    this.labelColor = Colors.red,
+    this.labelColor = Colors.black,
   });
 
   @override
@@ -47,7 +47,11 @@ class RouteMarkersLayer extends StatelessWidget {
         if (points.length >= 2)
           PolylineLayer(
             polylines: [
-              Polyline(points: points, strokeWidth: 3.0, color: Colors.green),
+              Polyline(
+                points: points,
+                strokeWidth: 1.5,
+                color: Colors.green.shade200,
+              ),
             ],
           ),
       ],
@@ -72,7 +76,7 @@ class RouteMarkersLayer extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: .9),
+          color: Colors.white.withValues(alpha: .7),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -85,15 +89,15 @@ class RouteMarkersLayer extends StatelessWidget {
         child: Text(
           label,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 10,
             fontWeight: FontWeight.bold,
             color: labelColor,
           ),
         ),
       ),
       alignment: Alignment.topCenter,
-      height: 32,
-      width: 40,
+      height: 24,
+      width: 24,
     );
   }
 }

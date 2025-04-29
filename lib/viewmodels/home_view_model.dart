@@ -24,7 +24,6 @@ class HomeViewModel extends ChangeNotifier {
   bool _isLoading = true;
 
   List<LatLng> _routePoints = [];
-  bool _isRouteActive = false;
 
   // Геттеры
   MapLayerType get currentLayer => _currentLayer;
@@ -32,7 +31,6 @@ class HomeViewModel extends ChangeNotifier {
   HiveCacheStore? get cacheStore => _cacheStore;
   bool get isLoading => _isLoading;
   List<LatLng> get routePoints => _routePoints;
-  bool get isRouteActive => _isRouteActive;
 
   RouteElevationResult? _routeInfo;
   RouteElevationResult? get routeInfo => _routeInfo;
@@ -64,6 +62,7 @@ class HomeViewModel extends ChangeNotifier {
   // Метод для обработки нажатия на карту
   Future<void> onMapTap(TapPosition tapPosition, LatLng point) async {
     // Если у нас уже 2 точки, начинаем заново
+    _showLayerSelector = false;
     if (_routePoints.length >= 2) {
       _routePoints = [point];
       _routeInfo = null;

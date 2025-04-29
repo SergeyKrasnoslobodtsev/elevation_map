@@ -12,18 +12,32 @@ class MapTileLayer extends StatelessWidget {
   const MapTileLayer({
     required this.layerType,
     required this.cacheStore,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TileLayer(
-      urlTemplate: layerType.urlTemplate,
-      userAgentPackageName: 'com.example.elevation_map',
-      tileProvider: CachedTileProvider(
-        maxStale: const Duration(days: 30),
-        store: cacheStore,
-      ),
+    return Stack(
+      children: [
+        TileLayer(
+          urlTemplate: layerType.urlTemplate,
+          userAgentPackageName: 'com.example.elevation_map',
+          tileProvider: CachedTileProvider(
+            maxStale: const Duration(days: 30),
+            store: cacheStore,
+          ),
+        ),
+
+        if (layerType == MapLayerType.satellite)
+          TileLayer(
+            urlTemplate: layerType.labelUrlTemplate,
+            userAgentPackageName: 'com.example.elevation_map',
+            tileProvider: CachedTileProvider(
+              maxStale: const Duration(days: 30),
+              store: cacheStore,
+            ),
+          ),
+      ],
     );
   }
 }

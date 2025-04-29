@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'service_locator.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   setupDependencies();
 
   runApp(HomeScreen());
