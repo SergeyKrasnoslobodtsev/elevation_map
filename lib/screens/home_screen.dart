@@ -31,6 +31,18 @@ class HomeScreen extends StatelessWidget {
                         onMapTap: viewModel.onMapTap,
                       ),
 
+                  if (viewModel.routeInfo != null &&
+                      viewModel.routePoints.length >= 2)
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: ElevationChartPanel(
+                        routeInfo: viewModel.routeInfo!,
+                        onClose: viewModel.clearRoute,
+                      ),
+                    ),
+
                   // Кнопка выбора слоев
                   Positioned(
                     top: 32,
@@ -57,18 +69,6 @@ class HomeScreen extends StatelessWidget {
                       child: LayerSelectorPanel(
                         currentLayer: viewModel.currentLayer,
                         onLayerSelected: viewModel.selectMapLayer,
-                      ),
-                    ),
-
-                  if (viewModel.routeInfo != null &&
-                      viewModel.routePoints.length >= 2)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: ElevationChartPanel(
-                        routeInfo: viewModel.routeInfo!,
-                        onClose: viewModel.clearRoute,
                       ),
                     ),
                 ],
