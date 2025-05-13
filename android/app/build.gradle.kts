@@ -36,24 +36,6 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
-
-    applicationVariants.all {
-        outputs.all {
-            // Kotlin DSL подход к работе с фильтрами
-            if (this is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
-                val filters = this.filters
-                val abiFilter = filters.find { it.filterType == "ABI" }
-                
-                if (abiFilter != null) {
-                    // Используем правильное свойство для доступа к значению фильтра
-                    val abiValue = abiFilter.identifier
-                    outputFileName = "el_map-${abiValue}-${buildType.name}-${versionName}.apk"
-                } else {
-                    outputFileName = "el_map-${buildType.name}-${versionName}.apk"
-                }
-            }
-        }
-    }
 }
 
 flutter {
