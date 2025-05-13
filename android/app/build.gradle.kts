@@ -37,15 +37,20 @@ android {
         }
     }
 
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def abiName = output.getFilter(com.android.build.OutputFile.ABI)
-            if (abiName != null) {
-                // Для сборок с разделением по ABI
-                outputFileName = "el_map-${variant.versionName}-${abiName}-${variant.buildType.name}.apk"
-            } else {
-                // Для обычных сборок
-                outputFileName = "el_map-${variant.versionName}-${variant.buildType.name}.apk"
+    applicationVariants.all {
+        outputs.all {
+            // Kotlin DSL подход к работе с фильтрами
+            if (this is com.android.build.gradle.internal.api.BaseVariantOutputImpl) {
+                val filters = this.filters
+                val abiFilter = filters.find { it.filterType == "ABI" }
+                
+                if (abiFilter != null) {
+                    // Используем правильное свойство для доступа к значению фильтра
+                    val abiValue = abiFilter.identifier
+                    outputFileName = "el_map-${abiValue}-${buildType.name}-${versionName}.apk"
+                } else {
+                    outputFileName = "el_map-${buildType.name}-${versionName}.apk"
+                }
             }
         }
     }
