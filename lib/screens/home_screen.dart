@@ -44,33 +44,33 @@ class HomeScreen extends StatelessWidget {
                     ),
 
                   // Кнопка выбора слоев
-                  Positioned(
-                    top: 32,
-                    right: 16,
-                    child: MapControlButton(
-                      icon: Icons.settings,
-                      onTap: viewModel.toggleLayerSelector,
-                    ),
-                  ),
-                  Positioned(
-                    top: 92,
-                    right: 16,
-                    child: MapControlButton(
-                      icon: Icons.layers,
-                      onTap: viewModel.toggleLayerSelector,
-                    ),
-                  ),
-                  // Панель выбора слоев
-                  if (viewModel.showLayerSelector)
-                    Positioned(
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
-                      child: LayerSelectorPanel(
-                        currentLayer: viewModel.currentLayer,
-                        onLayerSelected: viewModel.selectMapLayer,
-                      ),
-                    ),
+                  // Positioned(
+                  //   top: 32,
+                  //   right: 16,
+                  //   child: MapControlButton(
+                  //     icon: Icons.settings,
+                  //     onTap: viewModel.toggleLayerSelector,
+                  //   ),
+                  // ),
+                  // Positioned(
+                  //   top: 92,
+                  //   right: 16,
+                  //   child: MapControlButton(
+                  //     icon: Icons.layers,
+                  //     onTap: viewModel.toggleLayerSelector,
+                  //   ),
+                  // ),
+                  // // Панель выбора слоев
+                  // if (viewModel.showLayerSelector)
+                  //   Positioned(
+                  //     left: 0,
+                  //     right: 0,
+                  //     bottom: 0,
+                  //     child: LayerSelectorPanel(
+                  //       currentLayer: viewModel.currentLayer,
+                  //       onLayerSelected: viewModel.selectMapLayer,
+                  //     ),
+                  //   ),
                 ],
               ),
             ),

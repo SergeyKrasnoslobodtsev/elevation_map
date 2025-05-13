@@ -36,6 +36,19 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def abiName = output.getFilter(com.android.build.OutputFile.ABI)
+            if (abiName != null) {
+                // Для сборок с разделением по ABI
+                outputFileName = "el_map-${variant.versionName}-${abiName}-${variant.buildType.name}.apk"
+            } else {
+                // Для обычных сборок
+                outputFileName = "el_map-${variant.versionName}-${variant.buildType.name}.apk"
+            }
+        }
+    }
 }
 
 flutter {
