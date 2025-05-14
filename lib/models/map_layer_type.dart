@@ -19,8 +19,3 @@ enum MapLayerType {
 
   const MapLayerType(this.name, this.urlTemplate);
 }
-
-// Примеры URL для карт высоты:
-// https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png
-// https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg
-// https://remotepixel.ca/srtm/{z}/{x}/{y}.png

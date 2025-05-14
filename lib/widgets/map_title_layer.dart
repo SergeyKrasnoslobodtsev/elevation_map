@@ -32,7 +32,6 @@ class MapTileLayer extends StatelessWidget {
             store: cacheStore,
           ),
         ),
-
         if (isElevationEnabled)
           Opacity(
             opacity: 0.5,

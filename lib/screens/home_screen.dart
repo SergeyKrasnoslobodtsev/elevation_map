@@ -51,18 +51,18 @@ class HomeScreen extends StatelessWidget {
                     top: 32,
                     right: 16,
                     child: MapControlButton(
-                      icon: Icons.settings,
-                      onTap: viewModel.toggleLayerSelector,
-                    ),
-                  ),
-                  Positioned(
-                    top: 92,
-                    right: 16,
-                    child: MapControlButton(
                       icon: Icons.layers,
                       onTap: viewModel.toggleLayerSelector,
                     ),
                   ),
+                  // Positioned(
+                  //   top: 92,
+                  //   right: 16,
+                  //   child: MapControlButton(
+                  //     icon: Icons.layers,
+                  //     onTap: viewModel.toggleLayerSelector,
+                  //   ),
+                  // ),
                   // Панель выбора слоев
                   if (viewModel.showLayerSelector)
                     Positioned(

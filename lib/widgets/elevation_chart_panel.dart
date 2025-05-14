@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/elevation_map_service.dart';
 import 'elevation_chart.dart';
 
-class ElevationChartPanel extends StatelessWidget {
+class ElevationChartPanel extends StatefulWidget {
   final RouteElevationResult routeInfo;
   final VoidCallback onClose;
 
@@ -13,11 +13,18 @@ class ElevationChartPanel extends StatelessWidget {
   });
 
   @override
+  _ElevationChartPanelState createState() => _ElevationChartPanelState();
+}
+
+class _ElevationChartPanelState extends State<ElevationChartPanel> {
+  double _offsetMeters = 5;
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
+        color: Colors.white.withValues(alpha: .9),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
         boxShadow: [
           BoxShadow(
@@ -30,12 +37,47 @@ class ElevationChartPanel extends StatelessWidget {
       child: Column(
         children: [
           ElevationChartWidget(
-            elevationData: routeInfo.points,
-            totalDistanceKm: routeInfo.distanceInKm,
-            elevationGain: routeInfo.elevationGainInM,
-            elevationLoss: routeInfo.elevationLossInM,
-            distances: routeInfo.distances,
+            elevationData: widget.routeInfo.points,
+            totalDistanceKm: widget.routeInfo.distanceInKm,
+            elevationGain: widget.routeInfo.elevationGainInM,
+            elevationLoss: widget.routeInfo.elevationLossInM,
+            elevetionStart: _offsetMeters,
+            distances: widget.routeInfo.distances,
           ),
+          const SizedBox(height: 16),
+
+          // Трэкбар для смещения высоты от 5 до 50 м с шагом 5
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Запуск с высоты:',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700],
+                ),
+              ),
+              Text(
+                '${_offsetMeters.toInt()} м',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700],
+                ),
+              ),
+            ],
+          ),
+          Slider(
+            thumbColor: Colors.green.shade50,
+            inactiveColor: Colors.green[300],
+            activeColor: Colors.green[700],
+            value: _offsetMeters,
+            min: 5,
+            max: 50,
+            divisions: 9,
+            label: '${_offsetMeters.toInt()} м',
+            onChanged: (val) => setState(() => _offsetMeters = val),
+          ),
+
           const SizedBox(height: 16),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -43,7 +85,7 @@ class ElevationChartPanel extends StatelessWidget {
               foregroundColor: Colors.green,
               minimumSize: const Size(double.infinity, 48),
             ),
-            onPressed: onClose,
+            onPressed: widget.onClose,
             child: const Text('Очистить маршрут'),
           ),
         ],

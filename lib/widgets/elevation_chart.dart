@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../models/elevation_point.dart';
 
@@ -8,6 +9,7 @@ class ElevationChartWidget extends StatelessWidget {
   final double totalDistanceKm;
   final double elevationGain;
   final double elevationLoss;
+  final double elevetionStart;
   final List<double> distances;
 
   const ElevationChartWidget({
@@ -16,6 +18,7 @@ class ElevationChartWidget extends StatelessWidget {
     required this.totalDistanceKm,
     required this.elevationGain,
     required this.elevationLoss,
+    required this.elevetionStart,
     required this.distances,
   });
 
@@ -32,6 +35,12 @@ class ElevationChartWidget extends StatelessWidget {
     // Найдем мин и макс значения высот для настройки шкалы
     final double minElevation = elevations.reduce((a, b) => a < b ? a : b);
     final double maxElevation = elevations.reduce((a, b) => a > b ? a : b);
+
+    final double startOffsetElev = elevations.first + elevetionStart; // A + 50м
+    final double endElev = elevations.last;
+
+    // гарантируем, что chart.maxY покрывает и вашу пунктирную линию
+    final double effectiveMaxElev = math.max(maxElevation, startOffsetElev);
 
     // Определим интервал для шкалы высот
     double yInterval;
@@ -115,7 +124,7 @@ class ElevationChartWidget extends StatelessWidget {
           child: LineChart(
             LineChartData(
               minY: (minElevation - 5).floorToDouble(),
-              maxY: (maxElevation + 5).ceilToDouble(),
+              maxY: (effectiveMaxElev + 5).ceilToDouble(),
               minX: 0,
               maxX: totalDistanceKm,
               lineBarsData: [
@@ -132,6 +141,19 @@ class ElevationChartWidget extends StatelessWidget {
                     show: true,
                     color: Colors.green.withValues(alpha: .2),
                   ),
+                ),
+                // новая прямая от A до B
+                LineChartBarData(
+                  spots: [
+                    FlSpot(0, startOffsetElev),
+                    FlSpot(totalDistanceKm, endElev),
+                  ],
+                  isCurved: false,
+                  color: Colors.blue,
+                  barWidth: 2,
+                  dotData: FlDotData(show: false),
+                  dashArray: [5, 5], // пунктирная линия
+                  belowBarData: BarAreaData(show: false),
                 ),
               ],
               titlesData: _buildTitlesData(yInterval, xInterval),
@@ -165,7 +187,7 @@ class ElevationChartWidget extends StatelessWidget {
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
-              style: TextStyle(color: Colors.grey[700], fontSize: 11),
+              style: TextStyle(color: Colors.grey[700], fontSize: 10),
               textAlign: TextAlign.right,
             );
           },
