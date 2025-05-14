@@ -9,6 +9,8 @@ import 'router_markers_layer.dart';
 
 class MapWidget extends StatelessWidget {
   final MapLayerType currentLayer;
+  final bool isElevationEnabled;
+  final bool isStreetAndRoadsEnabled;
   final HiveCacheStore cacheStore;
   final List<LatLng> points; // Список точек маршрута
   final Function(TapPosition, LatLng)
@@ -17,6 +19,8 @@ class MapWidget extends StatelessWidget {
   const MapWidget({
     super.key,
     required this.currentLayer,
+    required this.isElevationEnabled,
+    required this.isStreetAndRoadsEnabled,
     required this.cacheStore,
     required this.points,
     required this.onMapTap,
@@ -31,7 +35,12 @@ class MapWidget extends StatelessWidget {
         onTap: onMapTap,
       ),
       children: [
-        MapTileLayer(layerType: currentLayer, cacheStore: cacheStore),
+        MapTileLayer(
+          layerType: currentLayer,
+          isElevationEnabled: isElevationEnabled,
+          isStreetAndRoadsEnabled: isStreetAndRoadsEnabled,
+          cacheStore: cacheStore,
+        ),
 
         // Слой с маркерами маршрута, если точки заданы
         if (points.isNotEmpty)

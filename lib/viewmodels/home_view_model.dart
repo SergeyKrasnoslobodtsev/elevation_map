@@ -19,6 +19,8 @@ class HomeViewModel extends ChangeNotifier {
 
   // Состояние
   MapLayerType _currentLayer = MapLayerType.satellite;
+  bool _isStreetAndRoadsEnabled = true;
+  bool _isElevationEnabled = true;
   bool _showLayerSelector = false;
   HiveCacheStore? _cacheStore;
   bool _isLoading = true;
@@ -27,6 +29,8 @@ class HomeViewModel extends ChangeNotifier {
 
   // Геттеры
   MapLayerType get currentLayer => _currentLayer;
+  bool get isStreetAndRoadsEnabled => _isStreetAndRoadsEnabled;
+  bool get isElevationEnabled => _isElevationEnabled;
   bool get showLayerSelector => _showLayerSelector;
   HiveCacheStore? get cacheStore => _cacheStore;
   bool get isLoading => _isLoading;
@@ -50,6 +54,17 @@ class HomeViewModel extends ChangeNotifier {
 
   void toggleLayerSelector() {
     _showLayerSelector = !_showLayerSelector;
+    notifyListeners();
+  }
+
+  // Метод для переключения слоя карты
+  void toggleStreetAndRoads(bool value) {
+    _isStreetAndRoadsEnabled = value;
+    notifyListeners();
+  }
+
+  void toggleElevation(bool value) {
+    _isElevationEnabled = value;
     notifyListeners();
   }
 

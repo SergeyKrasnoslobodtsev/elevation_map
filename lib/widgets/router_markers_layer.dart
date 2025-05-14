@@ -30,6 +30,7 @@ class RouteMarkersLayer extends StatelessWidget {
 
         // Метки A и Б
         MarkerLayer(
+          rotate: true,
           markers:
               points
                   .asMap()
