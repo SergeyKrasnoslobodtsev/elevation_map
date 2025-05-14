@@ -7,10 +7,15 @@ import '../models/map_layer_type.dart';
 
 class MapTileLayer extends StatelessWidget {
   final MapLayerType layerType;
+  final bool isElevationEnabled;
+  final bool isStreetAndRoadsEnabled;
+
   final HiveCacheStore cacheStore;
 
   const MapTileLayer({
     required this.layerType,
+    required this.isElevationEnabled,
+    required this.isStreetAndRoadsEnabled,
     required this.cacheStore,
     super.key,
   });
@@ -18,7 +23,7 @@ class MapTileLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: [
+      children: <Widget>[
         TileLayer(
           urlTemplate: layerType.urlTemplate,
           userAgentPackageName: 'com.example.elevation_map',
@@ -27,10 +32,21 @@ class MapTileLayer extends StatelessWidget {
             store: cacheStore,
           ),
         ),
-
-        if (layerType == MapLayerType.satellite)
+        if (isElevationEnabled)
+          Opacity(
+            opacity: 0.5,
+            child: TileLayer(
+              urlTemplate: MapLayerType.elevation.urlTemplate,
+              userAgentPackageName: 'com.example.elevation_map',
+              tileProvider: CachedTileProvider(
+                maxStale: const Duration(days: 30),
+                store: cacheStore,
+              ),
+            ),
+          ),
+        if (isStreetAndRoadsEnabled)
           TileLayer(
-            urlTemplate: layerType.labelUrlTemplate,
+            urlTemplate: MapLayerType.streetandroads.urlTemplate,
             userAgentPackageName: 'com.example.elevation_map',
             tileProvider: CachedTileProvider(
               maxStale: const Duration(days: 30),

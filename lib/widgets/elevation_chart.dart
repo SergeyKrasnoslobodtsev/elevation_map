@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
 
 import '../models/elevation_point.dart';
 
@@ -8,6 +9,7 @@ class ElevationChartWidget extends StatelessWidget {
   final double totalDistanceKm;
   final double elevationGain;
   final double elevationLoss;
+  final double elevetionStart;
   final List<double> distances;
 
   const ElevationChartWidget({
@@ -16,6 +18,7 @@ class ElevationChartWidget extends StatelessWidget {
     required this.totalDistanceKm,
     required this.elevationGain,
     required this.elevationLoss,
+    required this.elevetionStart,
     required this.distances,
   });
 
@@ -32,6 +35,12 @@ class ElevationChartWidget extends StatelessWidget {
     // Найдем мин и макс значения высот для настройки шкалы
     final double minElevation = elevations.reduce((a, b) => a < b ? a : b);
     final double maxElevation = elevations.reduce((a, b) => a > b ? a : b);
+
+    final double startOffsetElev = elevations.first + elevetionStart; // A + 50м
+    final double endElev = elevations.last;
+
+    // гарантируем, что chart.maxY покрывает и вашу пунктирную линию
+    final double effectiveMaxElev = math.max(maxElevation, startOffsetElev);
 
     // Определим интервал для шкалы высот
     double yInterval;
@@ -72,19 +81,19 @@ class ElevationChartWidget extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Профиль высот',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Colors.grey[700],
               ),
             ),
             Text(
               '${totalDistanceKm.toStringAsFixed(2)} км',
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Colors.grey[700],
               ),
             ),
           ],
@@ -115,7 +124,7 @@ class ElevationChartWidget extends StatelessWidget {
           child: LineChart(
             LineChartData(
               minY: (minElevation - 5).floorToDouble(),
-              maxY: (maxElevation + 5).ceilToDouble(),
+              maxY: (effectiveMaxElev + 5).ceilToDouble(),
               minX: 0,
               maxX: totalDistanceKm,
               lineBarsData: [
@@ -130,8 +139,21 @@ class ElevationChartWidget extends StatelessWidget {
                   dotData: FlDotData(show: false),
                   belowBarData: BarAreaData(
                     show: true,
-                    color: Colors.green.withOpacity(0.2),
+                    color: Colors.green.withValues(alpha: .2),
                   ),
+                ),
+                // новая прямая от A до B
+                LineChartBarData(
+                  spots: [
+                    FlSpot(0, startOffsetElev),
+                    FlSpot(totalDistanceKm, endElev),
+                  ],
+                  isCurved: false,
+                  color: Colors.blue,
+                  barWidth: 2,
+                  dotData: FlDotData(show: false),
+                  dashArray: [5, 5], // пунктирная линия
+                  belowBarData: BarAreaData(show: false),
                 ),
               ],
               titlesData: _buildTitlesData(yInterval, xInterval),
@@ -165,15 +187,18 @@ class ElevationChartWidget extends StatelessWidget {
           getTitlesWidget: (value, meta) {
             return Text(
               value.toInt().toString(),
-              style: const TextStyle(color: Colors.grey, fontSize: 11),
+              style: TextStyle(color: Colors.grey[700], fontSize: 10),
               textAlign: TextAlign.right,
             );
           },
           interval: yInterval,
         ),
-        axisNameWidget: const Padding(
+        axisNameWidget: Padding(
           padding: EdgeInsets.only(right: 8),
-          child: Text('м', style: TextStyle(color: Colors.grey, fontSize: 12)),
+          child: Text(
+            'м',
+            style: TextStyle(color: Colors.grey[700], fontSize: 12),
+          ),
         ),
       ),
       bottomTitles: AxisTitles(
@@ -182,21 +207,21 @@ class ElevationChartWidget extends StatelessWidget {
           reservedSize: 24,
           getTitlesWidget: (value, meta) {
             if (value == 0) {
-              return const Text(
+              return Text(
                 'A',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+                  color: Colors.grey[700],
                   fontSize: 12,
                 ),
               );
             }
             if (value >= totalDistanceKm * 0.98) {
-              return const Text(
+              return Text(
                 'Б',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey,
+                  color: Colors.grey[700],
                   fontSize: 12,
                 ),
               );
@@ -214,7 +239,7 @@ class ElevationChartWidget extends StatelessWidget {
 
             return Text(
               formattedValue,
-              style: const TextStyle(color: Colors.grey, fontSize: 11),
+              style: TextStyle(color: Colors.grey[700], fontSize: 11),
             );
           },
           interval: xInterval,
@@ -233,10 +258,16 @@ class ElevationChartWidget extends StatelessWidget {
       horizontalInterval: null,
       verticalInterval: null,
       getDrawingHorizontalLine: (value) {
-        return FlLine(color: Colors.grey.withOpacity(0.15), strokeWidth: 1);
+        return FlLine(
+          color: Colors.grey.withValues(alpha: .15),
+          strokeWidth: 1,
+        );
       },
       getDrawingVerticalLine: (value) {
-        return FlLine(color: Colors.grey.withOpacity(0.15), strokeWidth: 1);
+        return FlLine(
+          color: Colors.grey.withValues(alpha: .15),
+          strokeWidth: 1,
+        );
       },
     );
   }
@@ -245,7 +276,7 @@ class ElevationChartWidget extends StatelessWidget {
   FlBorderData _buildBorderData() {
     return FlBorderData(
       show: true,
-      border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
+      border: Border.all(color: Colors.grey.withValues(alpha: .3), width: 1),
     );
   }
 }

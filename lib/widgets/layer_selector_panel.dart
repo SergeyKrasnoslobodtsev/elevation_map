@@ -3,18 +3,32 @@ import '../models/map_layer_type.dart';
 
 class LayerSelectorPanel extends StatelessWidget {
   final MapLayerType currentLayer;
+  final bool isStreetAndRoadsEnabled;
+  final bool isElevationEnabled;
   final Function(MapLayerType) onLayerSelected;
+  final Function(bool) onStreetAndRoadsToggled;
+  final Function(bool) onElevationToggled;
 
   const LayerSelectorPanel({
     super.key,
     required this.currentLayer,
+    required this.isStreetAndRoadsEnabled,
+    required this.isElevationEnabled,
     required this.onLayerSelected,
+    required this.onStreetAndRoadsToggled,
+    required this.onElevationToggled,
   });
+
+  List<MapLayerType> get baseMapLayers => [
+    MapLayerType.satellite,
+    MapLayerType.topographic,
+    MapLayerType.standard,
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 126,
+      height: 250,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: .9),
         borderRadius: const BorderRadius.only(
@@ -29,14 +43,40 @@ class LayerSelectorPanel extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center, // Центрируем элементы
-          children:
-              MapLayerType.values
-                  .map((layer) => _buildLayerItem(layer))
-                  .toList(),
-        ),
+      child: Column(
+        children: [
+          const SizedBox(height: 12),
+          Center(
+            child: Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Центрируем элементы
+              children:
+                  baseMapLayers.map((layer) => _buildLayerItem(layer)).toList(),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Divider(),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                _buildOverlaySwitch(
+                  "Улицы и дороги",
+                  Icons.directions,
+                  isStreetAndRoadsEnabled,
+                  onStreetAndRoadsToggled,
+                ),
+                _buildOverlaySwitch(
+                  "Высота",
+                  Icons.height,
+                  isElevationEnabled,
+                  onElevationToggled,
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -81,6 +121,30 @@ class LayerSelectorPanel extends StatelessWidget {
     );
   }
 
+  Widget _buildOverlaySwitch(
+    String title,
+    IconData icon,
+    bool value,
+    Function(bool) onChanged,
+  ) {
+    return ListTile(
+      leading: Icon(icon, color: value ? Colors.green : Colors.grey),
+      title: Text(
+        title,
+        style: TextStyle(
+          fontWeight: value ? FontWeight.bold : FontWeight.normal,
+          color: value ? Colors.green : Colors.black,
+        ),
+      ),
+      trailing: Switch(
+        value: value,
+        onChanged: onChanged,
+        activeColor: Colors.green,
+      ),
+      dense: true,
+    );
+  }
+
   IconData _getIconForLayer(MapLayerType layer) {
     switch (layer) {
       case MapLayerType.satellite:
@@ -89,6 +153,10 @@ class LayerSelectorPanel extends StatelessWidget {
         return Icons.terrain;
       case MapLayerType.standard:
         return Icons.map;
+      case MapLayerType.streetandroads:
+        return Icons.directions;
+      case MapLayerType.elevation:
+        return Icons.height;
     }
   }
 }
