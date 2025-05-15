@@ -51,7 +51,7 @@ class _ElevationChartPanelState extends State<ElevationChartPanel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Запуск с высоты:',
+                'Добавочная высота источника сигнала:',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[700],
