@@ -1,16 +1,53 @@
-# elevation_map
 
-A new Flutter project.
+Markdown
+Wrap
+# Elevation Map
 
-## Getting Started
+**Описание:**  
+Этот проект предназначен для создания карты высот на основе двух заданных точек.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## Функциональность
+- Поддерживает основные типы карт:
+  * спутниковая.
+  * топографичическая.
+  * стандартная.
+- Поддерживает слои:
+  * высота.
+  * название улиц, городов, стран (удобно включать для спутниковой карты). 
+- Построение графика высот между двумя точками.
+- Информация на графике по проведенной линии от точки А до Б:
+  * сумма спусков и подъемов.
+  * значения высот в любой точке по маршруту.
+  * расстояние от точки А до точки Б.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Текущая структура проекта
+- **Основная ветка** — содержит стабильную версию проекта.
+- **Новая ветка (экспериментальная)** — проект будет развиваться с использованием [Mapbox](https://www.mapbox.com/) для создания автономных карт.  
+  > ⚠️ Обратите внимание: это экспериментальная версия, и ее функционал может изменяться.
+
+---
+
+## Установка и запуск
+1. Клонируйте репозиторий:
+   ```bash
+   git clone https://github.com/SergeyKrasnoslobodtsev/elevation_map.git
+2. Перейдите в папку проекта:
+   ```bash
+   cd elevation_map
+3. Установите зависимости:
+   ```bash
+   dart pub get
+5. Запустите проект:
+   ```bash
+   dart run
+
+## Планируемые улучшения
+- Поддержка автономных карт для работы без подключения к интернету.
+- Улучшение производительности и интерфейса основного проекта.
+
+## Контакты и обратная связь
+Если у вас возникли вопросы, пожелания или предложения по улучшению проекта, не стесняйтесь создавать Issues или Pull Requests в этом репозитории.
