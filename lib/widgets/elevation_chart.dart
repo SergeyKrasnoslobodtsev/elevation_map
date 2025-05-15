@@ -44,7 +44,7 @@ class ElevationChartWidget extends StatelessWidget {
 
     // Определим интервал для шкалы высот
     double yInterval;
-    double elevationRange = maxElevation - minElevation;
+    double elevationRange = effectiveMaxElev - minElevation;
     if (elevationRange < 50) {
       yInterval = 5;
     } else if (elevationRange < 100) {
